@@ -2,19 +2,21 @@
 #include <algorithm>
 using namespace std;
 
-void tablica(int t[], int rozmiar);
+void tablica(int t[], int rozmiar,int klucz);
 void Bubblesort(int tab[], int n);
 void SortowanieKoktajlowe(int tab[], int n); 
 void ScalanieSortowanie(int tab[], int lewo, int prawo);
 void scalanie(int tab[], int lewo, int srodek, int prawo);
 void SzybkieSortowanie(int tab[], int lewo, int prawo);
 int cos(int tab[], int lewo, int prawo);
+int WyszukiwanieLiniowe(int tab[], int rozmiar, int klucz);
 
 int main() {
     const int n = 12;
     int t[n];
     cout << "Tablica: ";
-    tablica(t, n);
+    int klucz = 8;
+    tablica(t, n, klucz);
     cout << "Tablica po sortowaniu bombelkowym: ";
     Bubblesort(t, n);
     cout << "Tablica po sortowaniu koktajlowym: ";
@@ -31,13 +33,24 @@ int main() {
         cout << t[i] << ", ";
     }
     cout << endl;
-}
+    cout << "Wyszukiwanie liniowe: ";
+    int index = WyszukiwanieLiniowe(t, n, klucz);
+    if (index != -1)
+        cout << "Znaleziono na indeksie: " << index << endl;
+    else
+        cout << "Nie znaleziono" << endl;
+};
 
-void tablica(int t[], int rozmiar) {
+void tablica(int t[], int rozmiar, int klucz) {
     int x = 25;
+    bool znaleziono = false;
     for(int i = 0; i < rozmiar; i++) {
         t[i] = rand() % x;
         cout << t[i] << ", ";
+        if (t[i] == klucz && !znaleziono) {
+            cout << "(Klucz) ";
+            znaleziono = true;
+        }
     }
     cout << "\n";
 }
@@ -144,6 +157,7 @@ void scalanie(int tab[], int lewo, int srodek, int prawo) {
     delete[] L;
     delete[] P;
 };
+
 void SzybkieSortowanie(int tab[], int lewo, int prawo) {
     if(lewo < prawo) {
         int indeks = cos(tab, lewo, prawo);
@@ -165,4 +179,13 @@ int cos(int tab[], int lewo, int prawo) {
 
     swap(tab[i + 1], tab[prawo]);
     return i + 1;
+}
+
+int WyszukiwanieLiniowe(int tab[], int rozmiar, int klucz) {
+    for (int i = 0; i < rozmiar; ++i) {
+        if (tab[i] == klucz) {
+            return i;
+        }
+    }
+    return -1;
 }
